@@ -18,7 +18,6 @@
             gap: 10,
             family: '"Noto Sans T Chinese", "Hiragino Sans GB", sans-serif'
         }
-        this.fontGap  = 10
 
         // register event listeners
         this.submit.addEventListener('click', this._onSubmit.bind(this))
