@@ -82,7 +82,8 @@
 
 
     Allen._drawLayer2 = function () {
-        this.ctx.drawImage(this.image2, 0, 396)
+        let y = this.image1.height - this.image2.height // 因為要貼邊
+        this.ctx.drawImage(this.image2, 0, y)
     }
 
 
