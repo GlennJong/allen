@@ -13,14 +13,16 @@
 
     Allen.init = function () {
 
+        // 文字與邊框距離的座標位置
         this.offsetX = 45
         this.offsetY = 110
 
+        // 預設的文字樣式，同 CSS 設定
         this.font = {
             color: 'white',
             weight: 900,
             size: 88,
-            gap: 10, // 行距
+            lineHeight: 10, // px
             family: '"Noto Sans T Chinese", "Hiragino Sans GB", sans-serif'
         }
 
@@ -69,7 +71,8 @@
         this.ctx.font = ([this.font.weight, (this.font.size + 'px'), this.font.family].join(' '))
         text.split('\n').forEach((sentence, index) => {
             sentence.split('').forEach((word, _index) => {
-                let x = (this.offsetX + this.font.gap + this.font.size) - (index * this.font.size + (index * this.font.gap))
+                // 讓文字從右邊往左邊排
+                let x = (this.offsetX + this.font.lineHeight + this.font.size) - (index * this.font.size + (index * this.font.lineHeight))
                 let y = this.offsetY + (_index * this.font.size)
                 this.ctx.fillText(word, x, y)
             })
