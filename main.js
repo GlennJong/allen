@@ -9,6 +9,7 @@
     Allen.ctx    = Allen.canvas.getContext('2d')
     Allen.input  = document.getElementById('input')
     Allen.submit = document.getElementById('submit')
+    Allen.download = document.getElementById('download')
 
     Allen.init = function () {
         this.font = {
@@ -21,6 +22,9 @@
 
         // register event listeners
         this.submit.addEventListener('click', this._onSubmit.bind(this))
+        this.canvas.addEventListener('drew',  () => this.download.style.display = 'block')
+        this.canvas.addEventListener('reset', () => this.download.style.display = 'none')
+        this.download.addEventListener('click', this._onDownload.bind(this))
     }
 
     Allen._draw = function (text) {
@@ -28,6 +32,7 @@
             .then(this._drawLayer1.bind(this))
             .then(this._drawText.bind(this, text))
             .then(this._drawLayer2.bind(this))
+            .then(() => this.canvas.dispatchEvent(this._event('drew')))
     }
 
 
@@ -77,6 +82,8 @@
     Allen._onSubmit = function (event) {
 
         event.preventDefault()
+        this._reset()
+
         let text = this.input.value
         let sentences = text.split('\n')
 
@@ -92,6 +99,14 @@
     }
 
 
+    Allen._onDownload = function () {
+        let link = document.createElement('a')
+        link.download = 'allen.jpg'
+        link.href = this.canvas.toDataURL('image/jpeg').replace("image/jpeg", "image/octet-stream")
+        link.click()
+    }
+
+
     Allen._validate = function (text, validator, message) {
         if (validator.call(null, text)) {
             throw new TypeError(message)
@@ -101,6 +116,12 @@
 
     Allen._reset = function () {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+        this.canvas.dispatchEvent(this._event('reset'))
+    }
+
+
+    Allen._event = function (name) {
+        return new Event(name)
     }
 
 
