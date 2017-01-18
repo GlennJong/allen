@@ -99,6 +99,11 @@
     }
 
 
+    Allen._reset = function () {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+    }
+
+
     Allen.init()
 
 
