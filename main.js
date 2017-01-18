@@ -100,7 +100,9 @@
             this._validate(sentences, (sentences) => Math.max.apply(Math, sentences.map((item) => item.length)) > 5, '一行不能超過 5 個字！！！')
             this._validate(sentences, (sentences) => sentences.length > 2, '不能超過 2 行！！！')
 
-            this._draw.call(this, this.input.value)
+            ga('send', 'event', 'Allen', '輸入文字', sentences.join(''))
+
+            this._draw.call(this, text)
         } catch(error) {
             alert(error.message);
         }
@@ -112,6 +114,7 @@
         link.download = 'allen.jpg'
         link.href = this.canvas.toDataURL('image/jpeg').replace("image/jpeg", "image/octet-stream")
         link.click()
+        ga('send', 'event', 'Allen', '下載圖片')
     }
 
 
