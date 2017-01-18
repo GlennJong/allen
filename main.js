@@ -11,6 +11,10 @@
     Allen.submit = document.getElementById('submit')
 
     Allen.init = function () {
+        this.fontSize = 88
+        this.fontGap  = 10
+
+        // register event listeners
         this.submit.addEventListener('click', this._onSubmit.bind(this))
     }
 
@@ -48,8 +52,15 @@
 
     Allen._drawText = function (text) {
         this.ctx.fillStyle = "white"
-        this.ctx.font = '40pt Calibri';
-        this.ctx.fillText(text, 10, 50)
+        this.ctx.font = '900 ' + this.fontSize + 'px "Noto Sans T Chinese", "Hiragino Sans GB", sans-serif';
+        text.split('\n').forEach((sentence, index) => {
+            sentence.split('').forEach((word, _index) => {
+                let x = 45 + (index * this.fontSize + (index * this.fontGap))
+                let y = 110 + (_index * this.fontSize)
+                this.ctx.fillText(word, x, y)
+            })
+        })
+
     }
 
 
