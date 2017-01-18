@@ -77,15 +77,27 @@
     Allen._onSubmit = function (event) {
 
         event.preventDefault()
+        let text = this.input.value
+        let sentences = text.split('\n')
 
-        if (!this.input.value) {
-            alert('請輸入文字！！！')
-        }
-        else {
+        try {
+            this._validate(text, (text) => !text, '請輸入文字！！！')
+            this._validate(sentences, (sentences) => Math.max.apply(Math, sentences.map((item) => item.length)) > 5, '一行不能超過 5 個字！！！')
+            this._validate(sentences, (sentences) => sentences.length > 2, '不能超過 2 行！！！')
+
             this._draw.call(this, this.input.value)
+        } catch(error) {
+            alert(error.message);
         }
-
     }
+
+
+    Allen._validate = function (text, validator, message) {
+        if (validator.call(null, text)) {
+            throw new TypeError(message)
+        }
+    }
+
 
     Allen.init()
 
