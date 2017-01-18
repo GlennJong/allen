@@ -55,7 +55,7 @@
         this.ctx.font = '900 ' + this.fontSize + 'px "Noto Sans T Chinese", "Hiragino Sans GB", sans-serif';
         text.split('\n').forEach((sentence, index) => {
             sentence.split('').forEach((word, _index) => {
-                let x = 45 + (index * this.fontSize + (index * this.fontGap))
+                let x = 143 - (index * this.fontSize + (index * this.fontGap))
                 let y = 110 + (_index * this.fontSize)
                 this.ctx.fillText(word, x, y)
             })
