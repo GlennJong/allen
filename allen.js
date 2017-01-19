@@ -16,7 +16,7 @@
         {
             codeName: "space",
             images: ['./images/scenes/space/bg.jpg', './images/scenes/space/main.png'],
-            delta: 1,
+            position: [0, 396],
             font: {
                 color: 'white'
             }
@@ -24,7 +24,7 @@
         {
             codeName: "new yourk",
             images: ['./images/scenes/new_york/bg.jpg', './images/scenes/new_york/main.png'],
-            delta: 0.6,
+            position: [0, 547],
             font: {
                 color: '#212121'
             }
@@ -136,11 +136,9 @@
 
 
     Allen._drawLayer2 = function () {
-        let delta = this.selectedScene.delta
-        let dWidth = this.selectedScene.image2.width * delta
-        let dHeight = this.selectedScene.image2.height * delta
-        let y = this.selectedScene.image1.height - dWidth // 因為要貼邊
-        this.ctx.drawImage(this.selectedScene.image2, 0, y, dWidth, dHeight)
+        let x = this.selectedScene.position[0]
+        let y = this.selectedScene.position[1]
+        this.ctx.drawImage(this.selectedScene.image2, x, y)
     }
 
 
