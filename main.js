@@ -7,11 +7,35 @@
 
     Allen.canvas = document.getElementById('canvas')
     Allen.ctx    = Allen.canvas.getContext('2d')
+    Allen.select  = document.getElementById('select')
     Allen.input  = document.getElementById('input')
     Allen.submit = document.getElementById('submit')
     Allen.download = document.getElementById('download')
 
+    Allen._scenes = [
+        {
+            codeName: "space",
+            images: ['./images/space.jpg', './images/main.png'],
+            delta: 1,
+            font: {
+                color: 'white'
+            }
+        },
+        {
+            codeName: "new yourk",
+            images: ['./images/new_york.jpg', './images/main.png'],
+            delta: 0.6,
+            font: {
+                color: '#212121'
+            }
+        }
+    ]
+
+
     Allen.init = function () {
+
+        // 預先宣告佔位屬性
+        this.selectedScene = null
 
         // 文字與邊框距離的座標位置
         this.offsetX = 45
@@ -26,15 +50,30 @@
             family: '"Noto Sans T Chinese", "Hiragino Sans GB", sans-serif'
         }
 
+        this._createOptions()
+
         // register event listeners
         this.submit.addEventListener('click', this._onSubmit.bind(this))
-        this.canvas.addEventListener('drew',  () => this.download.style.display = 'block')
-        this.canvas.addEventListener('reset', () => this.download.style.display = 'none')
+        this.canvas.addEventListener('drawing', this._onDrawing.bind(this))
+        this.canvas.addEventListener('drew',    () => this.download.style.display = 'block')
+        this.canvas.addEventListener('reset',   () => this.download.style.display = 'none')
         this.download.addEventListener('click', this._onDownload.bind(this))
     }
 
+
+    Allen._createOptions = function () {
+        this._scenes.forEach((scene) => {
+            let option = document.createElement('option')
+            option.value = scene.codeName
+            option.textContent = scene.codeName
+            this.select.appendChild(option)
+        })
+    }
+
+
     Allen._draw = function (text) {
-        this._loadImages(['./images/bg.jpg', './images/main.png'])
+        this.canvas.dispatchEvent(this._event('drawing'))
+        this._loadImages(this.selectedScene.images)
             .then(this._drawLayer1.bind(this))
             .then(this._drawText.bind(this, text))
             .then(this._drawLayer2.bind(this))
@@ -59,11 +98,11 @@
 
 
     Allen._drawLayer1 = function (images) {
-        [this.image1, this.image2] = images
+        [this.selectedScene.image1, this.selectedScene.image2] = images
 
-        this.canvas.width  = this.image1.width
-        this.canvas.height = this.image1.height
-        this.ctx.drawImage(this.image1, 0, 0, this.canvas.width, this.canvas.height)
+        this.canvas.width  = this.selectedScene.image1.width
+        this.canvas.height = this.selectedScene.image1.height
+        this.ctx.drawImage(this.selectedScene.image1, 0, 0, this.canvas.width, this.canvas.height)
     }
 
 
@@ -97,8 +136,18 @@
 
 
     Allen._drawLayer2 = function () {
-        let y = this.image1.height - this.image2.height // 因為要貼邊
-        this.ctx.drawImage(this.image2, 0, y)
+        let delta = this.selectedScene.delta
+        let dWidth = this.selectedScene.image2.width * delta
+        let dHeight = this.selectedScene.image2.height * delta
+        let y = this.selectedScene.image1.height - dWidth // 因為要貼邊
+        this.ctx.drawImage(this.selectedScene.image2, 0, y, dWidth, dHeight)
+    }
+
+
+    // 事前準備，覆寫設定值
+    Allen._onDrawing = function () {
+        this.selectedScene = this._getSelectedScene()
+        Object.assign(this.font, this.selectedScene.font)
     }
 
 
@@ -145,6 +194,12 @@
 
     Allen._event = function (name) {
         return new Event(name)
+    }
+
+
+    Allen._getSelectedScene = function () {
+        let selectedScenes = this._scenes.filter((scene) => scene.codeName === this.select.value)
+        return selectedScenes && selectedScenes[0]
     }
 
 
