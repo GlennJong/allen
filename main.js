@@ -66,18 +66,33 @@
         this.ctx.drawImage(this.image1, 0, 0, this.canvas.width, this.canvas.height)
     }
 
+
     Allen._drawText = function (text) {
         this.ctx.fillStyle = this.font.color
         this.ctx.font = ([this.font.weight, (this.font.size + 'px'), this.font.family].join(' '))
-        text.split('\n').forEach((sentence, index) => {
-            sentence.split('').forEach((word, _index) => {
-                // 讓文字從右邊往左邊排
-                let x = (this.offsetX + this.font.lineHeight + this.font.size) - (index * this.font.size + (index * this.font.lineHeight))
-                let y = this.offsetY + (_index * this.font.size)
-                this.ctx.fillText(word, x, y)
-            })
-        })
 
+        let input = text.split('\n').map((sentence) => sentence.split(''))
+
+        this._layout(input, (word, x, y) => {
+            this.ctx.fillText(word, x, y)
+        })
+    }
+
+
+    Allen._layout = function (input, writer, columnIndex) {
+        columnIndex = columnIndex || 0
+        input.forEach((item, index) => {
+
+            if (Array.isArray(item)) {
+                return this._layout(item, writer, index)
+            }
+
+            let x = (this.offsetX + this.font.lineHeight + this.font.size) - (columnIndex * this.font.size + (columnIndex * this.font.lineHeight))
+            let y = this.offsetY + (index * this.font.size)
+            writer.call(this, item, x, y)
+
+            return this
+        })
     }
 
 
