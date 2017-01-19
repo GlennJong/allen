@@ -15,7 +15,7 @@
     Allen._scenes = [
         {
             codeName: "space",
-            images: ['./images/space.jpg', './images/main.png'],
+            images: ['./images/scenes/space/bg.jpg', './images/scenes/space/main.png'],
             delta: 1,
             font: {
                 color: 'white'
@@ -23,7 +23,7 @@
         },
         {
             codeName: "new yourk",
-            images: ['./images/new_york.jpg', './images/main.png'],
+            images: ['./images/scenes/new_york/bg.jpg', './images/scenes/new_york/main.png'],
             delta: 0.6,
             font: {
                 color: '#212121'
